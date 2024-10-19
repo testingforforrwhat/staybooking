@@ -25,3 +25,5 @@ spring:
 staybooking:
   gcs:
     bucket: staybooking-439106
+  geocoding:
+    key: AIzaSyCBm4CEUGx9Uvw8fAw5r0-DwT64h9xsAX4
