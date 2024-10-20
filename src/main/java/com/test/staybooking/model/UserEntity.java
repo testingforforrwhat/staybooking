@@ -1,78 +1,92 @@
 package com.test.staybooking.model;
 
 
+import com.test.staybooking.model.UserRole;
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 
 @Entity
 @Table(name = "users")
-public class UserEntity {
-   @Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
-   private Long id;
-   private String username;
-   private String password;
-   @Enumerated(EnumType.STRING)
-   private UserRole role;
+public class UserEntity implements UserDetails {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String username;
+    private String password;
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
 
 
-   public UserEntity() {
-   }
+    public UserEntity() {
+    }
 
 
-   public UserEntity(Long id, String username, String password, UserRole role) {
-       this.id = id;
-       this.username = username;
-       this.password = password;
-       this.role = role;
-   }
+    public UserEntity(Long id, String username, String password, UserRole role) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.role = role;
+    }
 
 
-   public String getPassword() {
-       return password;
-   }
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
+    }
 
 
-   public String getUsername() {
-       return username;
-   }
+    @Override
+    public String getPassword() {
+        return password;
+    }
 
 
-   public Long getId() {
-       return id;
-   }
+    @Override
+    public String getUsername() {
+        return username;
+    }
 
 
-   public UserRole getRole() {
-       return role;
-   }
+    public Long getId() {
+        return id;
+    }
 
 
-   @Override
-   public boolean equals(Object o) {
-       if (this == o) return true;
-       if (o == null || getClass() != o.getClass()) return false;
-       UserEntity that = (UserEntity) o;
-       return Objects.equals(id, that.id) && Objects.equals(username, that.username) && Objects.equals(password, that.password) && role == that.role;
-   }
+    public UserRole getRole() {
+        return role;
+    }
 
 
-   @Override
-   public int hashCode() {
-       return Objects.hash(id, username, password, role);
-   }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserEntity that = (UserEntity) o;
+        return Objects.equals(id, that.id) && Objects.equals(username, that.username) && Objects.equals(password, that.password) && role == that.role;
+    }
 
 
-   @Override
-   public String toString() {
-       return "UserEntity{" +
-               "id=" + id +
-               ", username='" + username + '\'' +
-               ", password='" + password + '\'' +
-               ", role=" + role +
-               '}';
-   }
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, username, password, role);
+    }
+
+
+    @Override
+    public String toString() {
+        return "UserEntity{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", role=" + role +
+                '}';
+    }
 }
